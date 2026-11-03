@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="50%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#EAB308" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#064E3B" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded rect -->
+  <rect width="512" height="512" rx="128" fill="url(#bg-grad)" />
+
+  <!-- Inner subtle glow frame -->
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="4" />
+
+  <!-- Center Card / Wallet Container -->
+  <g filter="url(#shadow)">
+    <!-- Main Card Body -->
+    <rect x="96" y="136" width="320" height="240" rx="36" fill="#FFFFFF" fill-opacity="0.96" />
+    <path d="M96 200 H416" stroke="#E2E8F0" stroke-width="3" />
+    
+    <!-- Chip / Accent -->
+    <rect x="136" y="160" width="48" height="28" rx="8" fill="url(#gold-grad)" />
+    
+    <!-- Currency / Dong symbol & Wave -->
+    <text x="136" y="295" font-family="system-ui, -apple-system, sans-serif" font-size="76" font-weight="800" fill="#047857">₫</text>
+    
+    <!-- Rising Trend Badge -->
+    <rect x="236" y="242" width="140" height="54" rx="18" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="2" />
+    <path d="M256 274 L276 256 L294 270 L324 246" fill="none" stroke="#059669" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    <polyline points="310,246 324,246 324,260" fill="none" stroke="#059669" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- Upward Trend Accent Circles -->
+  <circle cx="390" cy="120" r="28" fill="#FDE047" fill-opacity="0.9" />
+  <circle cx="118" cy="396" r="16" fill="#34D399" fill-opacity="0.6" />
+</svg>

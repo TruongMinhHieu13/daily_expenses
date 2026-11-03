@@ -1,0 +1,95 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all access by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Validation for User Profile
+    function isValidUser(data, userId) {
+      return data.uid == userId &&
+        data.email is string &&
+        data.email.size() <= 200;
+    }
+
+    // Validation for Transaction
+    function isValidTransaction(data, userId) {
+      return data.userId == userId &&
+        data.type in ['expense', 'income'] &&
+        data.amount is number && data.amount > 0 &&
+        data.categoryId is string && data.categoryId.size() <= 100 &&
+        data.date is string && data.date.matches('^\\d{4}-\\d{2}-\\d{2}$') &&
+        data.paymentMethod in ['cash', 'bank', 'e_wallet'] &&
+        (!('note' in data) || (data.note is string && data.note.size() <= 500));
+    }
+
+    // Validation for Category
+    function isValidCategory(data, userId) {
+      return data.userId == userId &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+        data.type in ['expense', 'income'] &&
+        data.icon is string && data.icon.size() <= 50 &&
+        data.color is string && data.color.size() <= 30;
+    }
+
+    // Validation for UserSettings
+    function isValidSettings(data, userId) {
+      return data.userId == userId &&
+        (!('monthlyBudget' in data) || data.monthlyBudget is number) &&
+        (!('hideBalance' in data) || data.hideBalance is bool) &&
+        (!('pinEnabled' in data) || data.pinEnabled is bool);
+    }
+
+    // User document rules
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidUser(request.resource.data, userId);
+      allow delete: if false;
+
+      // Transactions subcollection
+      match /transactions/{transactionId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) &&
+          isValidId(transactionId) &&
+          isValidTransaction(request.resource.data, userId);
+        allow update: if isOwner(userId) &&
+          isValidTransaction(request.resource.data, userId);
+        allow delete: if isOwner(userId);
+      }
+
+      // Categories subcollection
+      match /categories/{categoryId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) &&
+          isValidId(categoryId) &&
+          isValidCategory(request.resource.data, userId);
+        allow update: if isOwner(userId) &&
+          isValidCategory(request.resource.data, userId);
+        allow delete: if isOwner(userId);
+      }
+
+      // Settings subcollection
+      match /settings/{settingId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) &&
+          isValidSettings(request.resource.data, userId);
+        allow delete: if false;
+      }
+    }
+  }
+}

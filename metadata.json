@@ -1,0 +1,6 @@
+{
+  "name": "Sổ Thu Chi - Quản Lý Tài Chính Cá Nhân",
+  "description": "Ứng dụng ghi chép nhật ký thu chi cá nhân chuẩn Mobile-First, giao diện Fintech hiện đại theo dõi dòng tiền, thống kê và bảo mật.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
