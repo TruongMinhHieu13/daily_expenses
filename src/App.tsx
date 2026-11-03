@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState } from 'react';
 import { FinanceProvider, useFinance } from './context/FinanceContext';
 import { TabType, BottomNav } from './components/BottomNav';
@@ -9,7 +10,6 @@ import { TransactionModal } from './components/TransactionModal';
 import { PinLockScreen } from './components/PinLockScreen';
 import { NotificationToast } from './components/NotificationToast';
 import { Transaction } from './types/finance';
-import { Wifi, Battery, Signal } from 'lucide-react';
 
 const MainApp: React.FC = () => {
   const { isAppLocked, toastMessage } = useFinance();
@@ -50,23 +50,12 @@ const MainApp: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-200 sm:py-6 flex items-center justify-center font-sans antialiased">
       {/* Mobile-first smartphone canvas container */}
-      <div className="w-full sm:max-w-[430px] min-h-screen sm:min-h-[860px] sm:max-h-[920px] bg-slate-50 sm:rounded-[40px] shadow-2xl sm:border-[8px] sm:border-slate-800 flex flex-col relative overflow-hidden">
-        {/* Subtle Smartphone Status Bar for realistic feel on desktop/preview */}
-        <div className="hidden sm:flex items-center justify-between px-7 pt-3 pb-1 text-slate-800 text-xs font-semibold select-none shrink-0">
-          <span>9:41</span>
-          <div className="w-20 h-4 bg-slate-800 rounded-full mx-auto" />
-          <div className="flex items-center gap-1.5 text-slate-700">
-            <Signal size={12} />
-            <Wifi size={12} />
-            <Battery size={13} />
-          </div>
-        </div>
-
+      <div className="w-full sm:max-w-[430px] min-h-screen sm:min-h-[860px] sm:max-h-[920px] bg-slate-50 sm:rounded-[36px] shadow-2xl sm:border sm:border-slate-300/80 flex flex-col relative overflow-hidden">
         {/* Global Toast Notification */}
         <NotificationToast message={toastMessage} />
 
-        {/* Active Tab Content Screen */}
-        <div className="flex-1 overflow-y-auto no-scrollbar">
+        {/* Active Tab Content Screen with Safe Area Top Clearance for Real Mobile Notches / Dynamic Island */}
+        <div className="flex-1 overflow-y-auto no-scrollbar pt-[max(env(safe-area-inset-top,0px),20px)] sm:pt-4">
           {activeTab === 'dashboard' && (
             <DashboardTab
               onOpenAddModal={handleOpenAddModal}

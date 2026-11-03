@@ -145,7 +145,7 @@ export const SettingsTab: React.FC = () => {
   const incomeCategories = categories.filter((c) => c.type === 'income');
 
   return (
-    <div className="pb-28 pt-4 px-4 space-y-4 text-slate-800">
+    <div className="pb-28 pt-2 px-4 space-y-4 text-slate-800">
       {/* Page Title */}
       <div className="flex items-center justify-between">
         <div>

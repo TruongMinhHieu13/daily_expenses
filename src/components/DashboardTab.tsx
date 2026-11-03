@@ -108,16 +108,17 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
     : 0;
 
   return (
-    <div className="pb-24 pt-3 px-4 space-y-3.5">
+    <div className="pb-24 pt-2 px-4 space-y-3.5">
       {/* Top Bar: Month Switcher & Privacy Eye */}
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2.5">
         <MonthSelector className="flex-1" />
         <button
+          type="button"
           onClick={toggleHideBalance}
-          className="p-2.5 rounded-2xl bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900 shadow-xs active:scale-95 transition"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-2xl bg-white border border-slate-200/90 text-slate-600 hover:text-slate-900 shadow-xs active:scale-95 transition"
           aria-label={settings.hideBalance ? 'Hiện số tiền' : 'Ẩn số tiền'}
         >
-          {settings.hideBalance ? <EyeOff size={18} /> : <Eye size={18} />}
+          {settings.hideBalance ? <EyeOff size={19} /> : <Eye size={19} />}
         </button>
       </div>
 

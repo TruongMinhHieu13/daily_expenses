@@ -45,29 +45,32 @@ export const MonthSelector: React.FC<{ className?: string }> = ({ className = ''
 
   return (
     <div className={`relative ${className}`}>
-      <div className="flex items-center justify-between bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div className="flex items-center justify-between bg-white/95 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-slate-200/90 shadow-xs">
         <button
+          type="button"
           onClick={handlePrevMonth}
-          className="p-1.5 rounded-xl hover:bg-slate-100 active:bg-slate-200 text-slate-600 transition"
+          className="min-w-[42px] min-h-[42px] flex items-center justify-center rounded-xl hover:bg-slate-100 active:bg-slate-200 text-slate-700 transition active:scale-95"
           aria-label="Tháng trước"
         >
-          <ChevronLeft size={18} />
+          <ChevronLeft size={20} />
         </button>
 
         <button
+          type="button"
           onClick={() => setShowPicker(!showPicker)}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-xl text-slate-800 font-bold text-sm tracking-tight hover:bg-slate-100 transition active:scale-98"
+          className="min-h-[42px] flex-1 flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-xl text-slate-800 font-bold text-sm tracking-tight hover:bg-slate-100 active:bg-slate-200 transition active:scale-98"
         >
-          <Calendar size={15} className="text-emerald-600" />
+          <Calendar size={16} className="text-emerald-600 shrink-0" />
           <span>{formatMonthFullVN(selectedMonth)}</span>
         </button>
 
         <button
+          type="button"
           onClick={handleNextMonth}
-          className="p-1.5 rounded-xl hover:bg-slate-100 active:bg-slate-200 text-slate-600 transition"
+          className="min-w-[42px] min-h-[42px] flex items-center justify-center rounded-xl hover:bg-slate-100 active:bg-slate-200 text-slate-700 transition active:scale-95"
           aria-label="Tháng sau"
         >
-          <ChevronRight size={18} />
+          <ChevronRight size={20} />
         </button>
       </div>
 
@@ -78,7 +81,7 @@ export const MonthSelector: React.FC<{ className?: string }> = ({ className = ''
             className="fixed inset-0 z-40 bg-black/30 backdrop-blur-xs"
             onClick={() => setShowPicker(false)}
           />
-          <div className="absolute top-12 left-0 right-0 z-50 bg-white rounded-2xl shadow-xl border border-slate-100 p-3 animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute top-[calc(100%+8px)] left-0 right-0 z-50 bg-white rounded-2xl shadow-xl border border-slate-100 p-3 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Chọn tháng thống kê

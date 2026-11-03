@@ -221,7 +221,7 @@ export const AnalyticsTab: React.FC = () => {
   };
 
   return (
-    <div className="pb-24 pt-3 px-4 space-y-4">
+    <div className="pb-24 pt-2 px-4 space-y-4">
       {/* Month Selector */}
       <MonthSelector />
 

@@ -147,7 +147,7 @@ export const LedgerTab: React.FC<LedgerTabProps> = ({
   };
 
   return (
-    <div className="pb-24 pt-3 px-4 space-y-3.5">
+    <div className="pb-24 pt-2 px-4 space-y-3.5">
       {/* Month Selector header */}
       <MonthSelector />
 
