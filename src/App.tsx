@@ -9,10 +9,11 @@ import { SettingsTab } from './components/SettingsTab';
 import { TransactionModal } from './components/TransactionModal';
 import { PinLockScreen } from './components/PinLockScreen';
 import { NotificationToast } from './components/NotificationToast';
+import { AuthErrorModal } from './components/AuthErrorModal';
 import { Transaction } from './types/finance';
 
 const MainApp: React.FC = () => {
-  const { isAppLocked, toastMessage } = useFinance();
+  const { isAppLocked, toastMessage, authError, clearAuthError, loginWithGoogle } = useFinance();
 
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,6 +92,14 @@ const MainApp: React.FC = () => {
           onClose={handleCloseModal}
           editTransaction={editingTransaction}
           defaultDate={modalDefaultDate}
+        />
+
+        {/* Auth Error Guidance & Diagnostic Modal */}
+        <AuthErrorModal
+          authError={authError}
+          onClose={clearAuthError}
+          onRetryPopup={() => loginWithGoogle(false)}
+          onRetryRedirect={() => loginWithGoogle(true)}
         />
       </div>
     </div>

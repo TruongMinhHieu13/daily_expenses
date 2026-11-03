@@ -73,9 +73,9 @@ export const CloudSyncBar: React.FC<{ compact?: boolean }> = ({ compact = false 
       </div>
 
       <button
-        onClick={loginWithGoogle}
+        onClick={() => loginWithGoogle(false)}
         disabled={isCloudSyncing}
-        className="flex items-center gap-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300/80 px-2.5 py-1.5 rounded-xl font-bold text-2xs shadow-2xs transition active:scale-95 shrink-0"
+        className="flex items-center gap-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300/80 px-2.5 py-1.5 rounded-xl font-bold text-2xs shadow-2xs transition active:scale-95 shrink-0 disabled:opacity-50"
       >
         {/* Google G logo */}
         <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">

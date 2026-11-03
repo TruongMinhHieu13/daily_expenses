@@ -9,6 +9,9 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: 'select_account',
+});
 
 export enum OperationType {
   CREATE = 'create',
@@ -33,6 +36,44 @@ export interface FirestoreErrorInfo {
       providerId?: string | null;
       email?: string | null;
     }[];
+  };
+}
+
+export interface AuthErrorInfo {
+  code: string;
+  message: string;
+  domain: string;
+  projectId: string;
+  helpType: 'unauthorized-domain' | 'popup-blocked' | 'operation-not-allowed' | 'popup-closed' | 'general';
+}
+
+export function parseAuthError(error: unknown): AuthErrorInfo {
+  const errObj = error as { code?: string; message?: string };
+  const code = errObj?.code || 'auth/unknown';
+  const domain = typeof window !== 'undefined' ? window.location.hostname : '';
+  const projectId = firebaseConfig.projectId || '';
+  let helpType: AuthErrorInfo['helpType'] = 'general';
+
+  if (code === 'auth/unauthorized-domain') {
+    helpType = 'unauthorized-domain';
+  } else if (
+    code === 'auth/popup-blocked' ||
+    code === 'auth/cancelled-popup-request' ||
+    (errObj?.message && errObj.message.toLowerCase().includes('popup'))
+  ) {
+    helpType = 'popup-blocked';
+  } else if (code === 'auth/popup-closed-by-user') {
+    helpType = 'popup-closed';
+  } else if (code === 'auth/operation-not-allowed') {
+    helpType = 'operation-not-allowed';
+  }
+
+  return {
+    code,
+    message: errObj?.message || 'Không thể đăng nhập Google.',
+    domain,
+    projectId,
+    helpType,
   };
 }
 
@@ -78,6 +119,17 @@ testConnection();
 export const loginWithGoogle = async (): Promise<User> => {
   const result = await signInWithPopup(auth, googleProvider);
   return result.user;
+};
+
+export const loginWithGoogleRedirect = async (): Promise<void> => {
+  const { signInWithRedirect } = await import('firebase/auth');
+  await signInWithRedirect(auth, googleProvider);
+};
+
+export const getRedirectLoginResult = async (): Promise<User | null> => {
+  const { getRedirectResult } = await import('firebase/auth');
+  const result = await getRedirectResult(auth);
+  return result ? result.user : null;
 };
 
 export const logoutGoogle = async (): Promise<void> => {

@@ -17,16 +17,22 @@ import {
   auth,
   db,
   loginWithGoogle as fbLoginWithGoogle,
+  loginWithGoogleRedirect as fbLoginWithGoogleRedirect,
+  getRedirectLoginResult as fbGetRedirectLoginResult,
   logoutGoogle as fbLogoutGoogle,
   handleFirestoreError,
   OperationType,
+  parseAuthError,
+  AuthErrorInfo,
 } from '../services/firebase';
 
 interface FinanceContextType {
   currentUser: User | null;
   isAuthLoading: boolean;
   isCloudSyncing: boolean;
-  loginWithGoogle: () => Promise<void>;
+  authError: AuthErrorInfo | null;
+  clearAuthError: () => void;
+  loginWithGoogle: (useRedirect?: boolean) => Promise<void>;
   logoutGoogle: () => Promise<void>;
   transactions: Transaction[];
   categories: Category[];
@@ -66,6 +72,9 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState<boolean>(true);
   const [isCloudSyncing, setIsCloudSyncing] = useState<boolean>(false);
+  const [authError, setAuthError] = useState<AuthErrorInfo | null>(null);
+
+  const clearAuthError = () => setAuthError(null);
 
   // 1. Transactions state
   const [transactions, setTransactions] = useState<Transaction[]>(() => {
@@ -168,6 +177,20 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     });
 
     return () => unsubscribe();
+  }, []);
+
+  // Check redirect login result if user was redirected from Google
+  useEffect(() => {
+    fbGetRedirectLoginResult()
+      .then((user) => {
+        if (user) {
+          showToast(`Chào mừng, ${user.displayName || user.email}! Đã kết nối đám mây.`);
+        }
+      })
+      .catch((err) => {
+        console.error('Redirect login error', err);
+        setAuthError(parseAuthError(err));
+      });
   }, []);
 
   // Listen to Firestore real-time updates when user is authenticated
@@ -287,14 +310,30 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [settings]);
 
   // Google Login / Logout
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = async (useRedirect = false) => {
     try {
       setIsCloudSyncing(true);
+      setAuthError(null);
+      if (useRedirect) {
+        await fbLoginWithGoogleRedirect();
+        return;
+      }
       const user = await fbLoginWithGoogle();
+      setCurrentUser(user);
       showToast(`Chào mừng, ${user.displayName || user.email}! Đã kết nối đám mây.`);
     } catch (error) {
       console.error('Login error', error);
-      showToast('Đăng nhập Google thất bại hoặc đã bị đóng');
+      const parsed = parseAuthError(error);
+      setAuthError(parsed);
+      if (parsed.helpType === 'popup-closed') {
+        showToast('Cửa sổ đăng nhập đã bị đóng');
+      } else if (parsed.helpType === 'unauthorized-domain') {
+        showToast('Tên miền chưa được cấp phép trong Firebase');
+      } else if (parsed.helpType === 'popup-blocked') {
+        showToast('Cửa sổ đăng nhập đã bị trình duyệt chặn');
+      } else {
+        showToast('Đăng nhập Google thất bại');
+      }
     } finally {
       setIsCloudSyncing(false);
     }
@@ -609,6 +648,8 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     currentUser,
     isAuthLoading,
     isCloudSyncing,
+    authError,
+    clearAuthError,
     loginWithGoogle,
     logoutGoogle,
     transactions,
