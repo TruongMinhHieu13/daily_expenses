@@ -16,6 +16,7 @@ import { useFinance } from '../context/FinanceContext';
 import { formatVND, formatDateVN, formatMonthFullVN } from '../utils/formatters';
 import { CategoryIcon } from './CategoryIcon';
 import { MonthSelector } from './MonthSelector';
+import { ReloadButton } from './ReloadButton';
 import { Transaction, TransactionType } from '../types/finance';
 
 interface LedgerTabProps {
@@ -148,8 +149,11 @@ export const LedgerTab: React.FC<LedgerTabProps> = ({
 
   return (
     <div className="pb-24 pt-2 px-4 space-y-3.5">
-      {/* Month Selector header */}
-      <MonthSelector />
+      {/* Month Selector & Reload header */}
+      <div className="flex items-center gap-2">
+        <MonthSelector className="flex-1" />
+        <ReloadButton />
+      </div>
 
       {/* Search & Filter Bar */}
       <div className="flex items-center gap-2">

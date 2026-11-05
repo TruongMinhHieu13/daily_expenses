@@ -15,6 +15,7 @@ import { useFinance } from '../context/FinanceContext';
 import { formatVND, formatMonthFullVN } from '../utils/formatters';
 import { CategoryIcon } from './CategoryIcon';
 import { MonthSelector } from './MonthSelector';
+import { ReloadButton } from './ReloadButton';
 
 export const AnalyticsTab: React.FC = () => {
   const { transactions, categories, selectedMonth, settings } = useFinance();
@@ -222,8 +223,11 @@ export const AnalyticsTab: React.FC = () => {
 
   return (
     <div className="pb-24 pt-2 px-4 space-y-4">
-      {/* Month Selector */}
-      <MonthSelector />
+      {/* Month Selector & Reload */}
+      <div className="flex items-center gap-2">
+        <MonthSelector className="flex-1" />
+        <ReloadButton />
+      </div>
 
       {/* Top Summary Card */}
       <div className="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs space-y-3">

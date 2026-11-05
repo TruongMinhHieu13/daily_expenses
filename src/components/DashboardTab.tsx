@@ -18,6 +18,7 @@ import { MonthSelector } from './MonthSelector';
 import { CategoryIcon } from './CategoryIcon';
 import { FinancialCalendar } from './FinancialCalendar';
 import { CloudSyncBar } from './CloudSyncBar';
+import { ReloadButton } from './ReloadButton';
 import { Transaction } from '../types/finance';
 
 interface DashboardTabProps {
@@ -109,14 +110,16 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
 
   return (
     <div className="pb-24 pt-2 px-4 space-y-3.5">
-      {/* Top Bar: Month Switcher & Privacy Eye */}
-      <div className="flex items-center justify-between gap-2.5">
+      {/* Top Bar: Month Switcher, Reload & Privacy Eye */}
+      <div className="flex items-center justify-between gap-2">
         <MonthSelector className="flex-1" />
+        <ReloadButton />
         <button
           type="button"
           onClick={toggleHideBalance}
           className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-2xl bg-white border border-slate-200/90 text-slate-600 hover:text-slate-900 shadow-xs active:scale-95 transition"
           aria-label={settings.hideBalance ? 'Hiện số tiền' : 'Ẩn số tiền'}
+          title={settings.hideBalance ? 'Hiện số tiền' : 'Ẩn số tiền'}
         >
           {settings.hideBalance ? <EyeOff size={19} /> : <Eye size={19} />}
         </button>

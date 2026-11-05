@@ -21,6 +21,7 @@ import { Category, TransactionType } from '../types/finance';
 import { CategoryIcon } from './CategoryIcon';
 import { PWAInstallButton } from './PWAInstallButton';
 import { CloudSyncBar } from './CloudSyncBar';
+import { ReloadButton } from './ReloadButton';
 import {
   AVAILABLE_CATEGORY_ICONS,
   CATEGORY_COLOR_PALETTE,
@@ -146,12 +147,13 @@ export const SettingsTab: React.FC = () => {
 
   return (
     <div className="pb-28 pt-2 px-4 space-y-4 text-slate-800">
-      {/* Page Title */}
+      {/* Page Title & Reload */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-slate-900 tracking-tight">Cài đặt & Tiện ích</h2>
           <p className="text-2xs text-slate-400">Tùy biến danh mục, ngân sách và bảo mật</p>
         </div>
+        <ReloadButton />
       </div>
 
       {/* Cloud Account & Realtime Sync Card */}
